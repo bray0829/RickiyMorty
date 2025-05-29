@@ -1,83 +1,56 @@
-import { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
-import './style.css';
+import { useState, useEffect, useContext } from 'react';
+import { useParams } from "react-router-dom";
+import { AppContext } from '../../Contexto/Contexto';
 
-function traducirEstado(estado) {
-  switch (estado) {
-    case 'Alive': return 'Vivo';
-    case 'Dead': return 'Muerto';
-    case 'unknown': return 'Desconocido';
-    default: return estado;
-  }
-}
-
-function traducirGenero(genero) {
-  switch (genero) {
-    case 'Male': return 'Masculino';
-    case 'Female': return 'Femenino';
-    case 'Genderless': return 'Sin género';
-    case 'unknown': return 'Desconocido';
-    default: return genero;
-  }
-}
-
-function traducirEspecie(especie) {
-  if (especie === 'Human') return 'Humano';
-  if (especie === 'Alien') return 'Alienígena';
-  return especie;
-}
-
-function Personaje() {
-  const { name } = useParams();
-  const [personajes, setPersonajes] = useState([]);
-  const [favoritos, setFavoritos] = useState([]);
+function Personajes() {
+  const { id } = useParams();
+  const [personaje, setPersonaje] = useState(null);
+  const { favoritos, setFavoritos } = useContext(AppContext);
 
   useEffect(() => {
-    fetch(`https://rickandmortyapi.com/api/character/?name=${name}`)
-      .then(response => response.json())
-      .then(responseData => {
-        if (responseData.results) {
-          setPersonajes(responseData.results); // guarda todos
-        } else {
-          setPersonajes([]);
-        }
-      })
-      .catch(error => console.error("Error:", error));
-  }, [name]);
+    fetch(`https://rickandmortyapi.com/api/character/${id}`)
+      .then(res => res.json())
+      .then(data => setPersonaje(data))
+      .catch(err => console.error("Error cargando personaje:", err));
+  }, [id]);
 
-  const toggleFavorito = (personaje) => {
-    const esFavorito = favoritos.some(p => p.id === personaje.id);
+  const esFavorito = personaje && favoritos.some(p => p.id === personaje.id);
+
+  const toggleFavorito = () => {
+    if (!personaje) return;
+
     if (esFavorito) {
       setFavoritos(favoritos.filter(p => p.id !== personaje.id));
     } else {
-      setFavoritos([...favoritos, { id: personaje.id, nombre: personaje.name }]);
+      setFavoritos([
+        ...favoritos,
+        {
+          id: personaje.id,
+          nombre: personaje.name,
+          image: personaje.image
+        }
+      ]);
     }
   };
 
-  if (personajes.length === 0) {
-    return <p>Buscando en otra dimensión...</p>;
-  }
+  if (!personaje) return <p>Cargando...</p>;
 
   return (
-    <div className="personajes-grid">
-      {personajes.map((personaje) => {
-        const esFavorito = favoritos.some(p => p.id === personaje.id);
-        return (
-          <div key={personaje.id} className="personaje-card">
-            <img src={personaje.image} alt={personaje.name} width="200" />
-            <h2>{personaje.name}</h2>
-            <p>Estado: {traducirEstado(personaje.status)}</p>
-            <p>Especie: {traducirEspecie(personaje.species)}</p>
-            <p>Género: {traducirGenero(personaje.gender)}</p>
-            <p>Origen: {personaje.origin?.name}</p>
-            <button onClick={() => toggleFavorito(personaje)}>
-              {esFavorito ? '❤️' : '🤍'}
-            </button>
-          </div>
-        );
-      })}
+    <div className="detalle-personaje">
+      <h2>{personaje.name}</h2>
+      <img src={personaje.image} alt={personaje.name} width="200" />
+      <p><strong>ID:</strong> {personaje.id}</p>
+      <p><strong>Estado:</strong> {personaje.status}</p>
+      <p><strong>Especie:</strong> {personaje.species}</p>
+      <p><strong>Género:</strong> {personaje.gender}</p>
+      <p><strong>Origen:</strong> {personaje.origin?.name}</p>
+      <p><strong>Aparece en:</strong> {personaje.episode.length} episodio(s)</p>
+
+      <button onClick={toggleFavorito}>
+        {esFavorito ? '❤️ Quitar de favoritos' : '🤍 Agregar a favoritos'}
+      </button>
     </div>
   );
 }
 
-export default Personaje;
+export default Personajes;

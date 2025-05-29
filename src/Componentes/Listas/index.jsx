@@ -1,55 +1,59 @@
 import { useState, useEffect } from 'react';
-import './style.css';
+import { useNavigate } from 'react-router-dom';
 import Filtro from '../Filtro';
-import { useNavigate } from "react-router-dom";
+import './style.css';
 
 function Listas() {
   const [data, setData] = useState([]);
-  const [busqueda, setBusqueda] = useState('');
   const [filtros, setFiltros] = useState({
-    status: '',
-    species: '',
-    gender: ''
+    especie: 'All',
+    estado: 'All',
+    genero: 'All'
   });
+  const [busqueda, setBusqueda] = useState('');
   const navigate = useNavigate();
 
   useEffect(() => {
-    const obtenerTodosLosPersonajes = async () => {
+    const obtenerPersonajes = async () => {
       try {
-        let baseURL = `https://rickandmortyapi.com/api/character/?`;
+        let url = 'https://rickandmortyapi.com/api/character';
+        const queryParams = [];
 
-        if (busqueda.length >= 3) {
-          baseURL += `&name=${busqueda}`;
+        if (filtros.especie !== 'All') queryParams.push(`species=${filtros.especie}`);
+        if (filtros.estado !== 'All') queryParams.push(`status=${filtros.estado}`);
+        if (filtros.genero !== 'All') queryParams.push(`gender=${filtros.genero}`);
+
+        if (queryParams.length) {
+          url += `?${queryParams.join('&')}`;
         }
 
-        Object.entries(filtros).forEach(([key, value]) => {
-          if (value) baseURL += `&${key}=${value}`;
-        });
-
-        let allResults = [];
-        let nextURL = baseURL;
-
-        while (nextURL) {
-          const res = await fetch(nextURL);
-          const json = await res.json();
-
-          if (json.results) {
-            allResults = [...allResults, ...json.results];
-            nextURL = json.info.next;
-          } else {
-            nextURL = null;
-          }
-        }
-
-        setData(allResults);
+        const res = await fetch(url);
+        const json = await res.json();
+        setData(json.results || []);
       } catch (error) {
         console.error("Error al obtener personajes:", error);
         setData([]);
       }
     };
 
-    obtenerTodosLosPersonajes();
-  }, [busqueda, filtros]);
+    obtenerPersonajes();
+  }, [filtros]);
+
+  const handleFiltroChange = (nuevoFiltro) => {
+    setFiltros(nuevoFiltro);
+  };
+
+  let resultados = data;
+
+  if (busqueda.length >= 3 && isNaN(busqueda)) {
+    resultados = data.filter((p) =>
+      p.name.toLowerCase().includes(busqueda.toLowerCase())
+    );
+  }
+
+  if (!isNaN(busqueda)) {
+    resultados = data.filter((p) => p.id === Number(busqueda));
+  }
 
   return (
     <>
@@ -61,23 +65,17 @@ function Listas() {
         className="c-buscador"
       />
 
-      <Filtro onFiltroChange={setFiltros} />
+      <Filtro onFiltroChange={handleFiltroChange} />
 
-      <section className='c-lista'>
-        {data.map((personaje) => (
+      <section className="c-lista">
+        {resultados.map((personaje) => (
           <div
-            className='c-lista-pokemon'
-            onClick={() => navigate(`/Personajes/${personaje.name}`)}
+            className="c-lista-personaje"
             key={personaje.id}
+            onClick={() => navigate(`/detalle/${personaje.id}`)}
           >
-            <p>ID: {personaje.id}</p>
-            <img
-              src={personaje.image}
-              alt={personaje.name}
-              width='auto'
-              height='100'
-              loading='lazy'
-            />
+            <img src={personaje.image} alt={personaje.name} height="100" loading="lazy" />
+            <p><strong>ID:</strong> {personaje.id}</p>
             <p>{personaje.name}</p>
           </div>
         ))}
