@@ -1,0 +1,105 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500&family=Rubik+Dirt&display=swap');
+
+.usuario-container {
+  font-family: 'Orbitron', sans-serif;
+  background-color: #0b0c10;
+  color: #66fcf1;
+  padding: 2rem;
+  border: 2px solid #45a29e;
+  border-radius: 12px;
+  max-width: 800px;
+  margin: auto;
+}
+
+.usuario-container h2, h3 {
+  font-family: 'Rubik Dirt', cursive;
+  color: #00ff00;
+  text-shadow: 0 0 5px #00ff00;
+}
+
+.formulario label {
+  display: block;
+  margin-bottom: 0.8rem;
+}
+
+input {
+  width: 100%;
+  padding: 0.4rem;
+  margin-top: 0.2rem;
+  border: none;
+  border-radius: 8px;
+  background-color: #1f2833;
+  color: white;
+}
+
+button {
+  background-color: #45a29e;
+  color: #0b0c10;
+  border: none;
+  padding: 0.5rem 1rem;
+  margin-top: 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+button:hover {
+  background-color: #66fcf1;
+}
+
+.mensaje {
+  background-color: #1f2833;
+  padding: 0.5rem;
+  border-radius: 6px;
+  margin-bottom: 1rem;
+}
+
+.imagenes-section input[type="text"] {
+  width: 80%;
+  display: inline-block;
+}
+
+.preview img {
+  margin-top: 1rem;
+  width: 200px;
+  border-radius: 10px;
+  border: 2px solid #66fcf1;
+}
+
+.imagenes-lista {
+  list-style: none;
+  padding: 0;
+  margin-top: 1rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.imagenes-lista li {
+  background-color: #1f2833;
+  padding: 0.8rem;
+  border-radius: 8px;
+  width: 180px;
+  text-align: center;
+}
+
+.imagenes-lista img {
+  width: 100%;
+  border-radius: 8px;
+  margin-bottom: 0.5rem;
+}
+
+.logout {
+  background-color: #c0392b;
+  color: white;
+}
+
+.logout:hover {
+  background-color: #e74c3c;
+}
+
+.cargando {
+  color: #66fcf1;
+  text-align: center;
+  margin-top: 4rem;
+}

@@ -1,0 +1,125 @@
+/* Tipografía futurista */
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
+
+:root {
+  --color-fondo: #0c0c0e;
+  --color-texto: #ffffff;
+  --color-portal: #00ff9f;
+  --color-neon: #00bfff;
+  --color-morado: #6c63ff;
+  --color-card-bg: #1c1c1e;
+  --sombra-neon: 0 0 10px var(--color-portal), 0 0 20px var(--color-portal);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Orbitron', sans-serif;
+}
+
+body {
+  background: radial-gradient(ellipse at center, #1a1a1a 0%, #0c0c0e 100%);
+  color: var(--color-texto);
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+
+/* Títulos */
+h1, h2, h3 {
+  text-align: center;
+  color: var(--color-portal);
+  text-shadow: var(--sombra-neon);
+  margin: 1rem 0;
+}
+
+/* Botones */
+button {
+  background-color: var(--color-portal);
+  border: none;
+  color: #000;
+  font-weight: bold;
+  padding: 0.6rem 1.2rem;
+  border-radius: 10px;
+  box-shadow: 0 0 10px var(--color-portal);
+  transition: all 0.2s ease;
+}
+
+button:hover {
+  background-color: var(--color-neon);
+  color: #fff;
+  transform: scale(1.05);
+}
+
+/* Inputs y selects */
+input, select {
+  background-color: #1e1e1e;
+  border: 2px solid var(--color-neon);
+  border-radius: 8px;
+  padding: 0.6rem;
+  color: white;
+  width: 100%;
+  margin: 0.5rem 0;
+}
+
+/* Contenedor general */
+.container {
+  max-width: 1200px;
+  margin: auto;
+  padding: 2rem;
+}
+
+/* Tarjetas */
+.card {
+  background-color: var(--color-card-bg);
+  border: 2px solid var(--color-portal);
+  border-radius: 15px;
+  padding: 1rem;
+  box-shadow: var(--sombra-neon);
+  transition: transform 0.3s ease;
+}
+
+.card:hover {
+  transform: scale(1.05);
+}
+
+/* Grid de personajes */
+.grid {
+  display: grid;
+  gap: 2rem;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  padding: 2rem;
+}
+
+/* Menú */
+.menu {
+  background-color: #0f0f0f;
+  border-bottom: 2px solid var(--color-portal);
+  padding: 1rem;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  color: var(--color-texto);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+/* Fondo animado simple tipo estrellas */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: url('https://www.transparenttextures.com/patterns/stardust.png');
+  opacity: 0.05;
+  z-index: -1;
+  animation: stars 60s linear infinite;
+}
+
+@keyframes stars {
+  0% { background-position: 0 0; }
+  100% { background-position: 1000px 1000px; }
+}

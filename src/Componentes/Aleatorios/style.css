@@ -1,0 +1,18 @@
+.aleatorios-container {
+  background-color: #101010;
+  padding: 1rem;
+  color: white;
+}
+
+.aleatorio-card {
+  border: 2px solid #00ff9f;
+  border-radius: 10px;
+  padding: 1rem;
+  background-color: #1c1c1e;
+  box-shadow: 0 0 8px #00ff9f;
+  transition: transform 0.2s ease;
+}
+
+.aleatorio-card:hover {
+  transform: scale(1.05);
+}

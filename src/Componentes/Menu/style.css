@@ -1,13 +1,26 @@
-.c-menu{
-    background-color: silver;
-    flex-wrap: wrap;
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: 10px;
-    width: 100%;
-    padding: 15px;
+.menu {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background-color: #121212; /* fondo oscuro */
+  padding: 0.8rem 0;
+  text-align: center;
+  z-index: 1000;
+  box-shadow: 0 -4px 8px rgba(0, 255, 255, 0.3);
+}
+
+.menu a {
+  color: #00ffff; /* neón cian */
+  text-decoration: none;
+  margin: 0 1.2rem;
+  font-weight: bold;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 1rem;
+  transition: color 0.2s;
+}
+
+.menu a:hover {
+  color: #ffffff;
+  text-shadow: 0 0 8px #00ffff;
 }

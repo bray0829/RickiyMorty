@@ -1,0 +1,22 @@
+
+.personajes-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 1.5rem;
+  background-color: #0f0f0f;
+  padding: 2rem;
+}
+
+.personaje-card {
+  background-color: #1c1c1e;
+  border: 2px solid #00ff9f;
+  border-radius: 10px;
+  color: white;
+  padding: 1rem;
+  transition: transform 0.2s ease-in-out;
+}
+
+.personaje-card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 15px #00ff9f;
+}

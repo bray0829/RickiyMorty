@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { supabase } from "../../supabase";
+import "./style.css";
 
 export default function Usuario() {
   const [usuario, setUsuario] = useState(null);
@@ -55,14 +56,19 @@ export default function Usuario() {
       .update(form)
       .eq("id", usuario.id);
 
-    setMensaje(error ? " Error al actualizar" : " Datos actualizados correctamente");
+    setMensaje(error ? " Error al actualizar" : "✅ Datos actualizados correctamente");
 
     setTimeout(() => setMensaje(""), 3000);
   };
 
   const handleAgregarUrl = async () => {
-    if (!nuevaUrl.trim() || !/^https?:\/\/.+\.(jpg|jpeg|png|gif|webp)$/.test(nuevaUrl)) {
-      alert("URL inválida. Asegúrate de que sea una imagen.");
+    if (!usuario) {
+      alert("Usuario no autenticado.");
+      return;
+    }
+
+    if (!nuevaUrl.trim()) {
+      alert("URL vacía. Por favor, ingresa una URL.");
       return;
     }
 
@@ -91,60 +97,69 @@ export default function Usuario() {
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
-    window.location.href = "/login"; // redirige al login
+    window.location.href = "/login";
   };
 
-  if (!usuario) return <p>Cargando...</p>;
+  if (!usuario) return <p className="cargando">Cargando...</p>;
 
   return (
-    <div>
-      <h2>Perfil de Usuario</h2>
-      {mensaje && <p style={{ color: "green" }}>{mensaje}</p>}
+    <div className="usuario-container">
+      <h2>👽 Perfil de Usuario</h2>
+      {mensaje && <p className="mensaje">{mensaje}</p>}
 
-      <label>Nombre:
-        <input name="nombre" value={form.nombre} onChange={handleChange} />
-      </label><br />
-      <label>Correo:
-        <input name="correo" value={form.correo} onChange={handleChange} />
-      </label><br />
-      <label>Fecha de nacimiento:
-        <input type="date" name="fecha_nacimiento" value={form.fecha_nacimiento} onChange={handleChange} />
-      </label><br />
-      <label>Teléfono:
-        <input name="telefono" value={form.telefono} onChange={handleChange} />
-      </label><br />
-      <label>Rol:
-        <input name="roll" value={form.roll} onChange={handleChange} disabled />
-      </label><br />
+      <div className="formulario">
+        <label>Nombre:
+          <input name="nombre" value={form.nombre} onChange={handleChange} />
+        </label>
+        <label>Correo:
+          <input name="correo" value={form.correo} onChange={handleChange} />
+        </label>
+        <label>Fecha de nacimiento:
+          <input type="date" name="fecha_nacimiento" value={form.fecha_nacimiento} onChange={handleChange} />
+        </label>
+        <label>Teléfono:
+          <input name="telefono" value={form.telefono} onChange={handleChange} />
+        </label>
+        <label>Rol:
+          <input name="roll" value={form.roll} onChange={handleChange} disabled />
+        </label>
 
-      <button onClick={handleUpdate}> Guardar cambios</button>
-
-      <hr />
-
-      <h3>Agregar imagen</h3>
-      <input
-        type="text"
-        placeholder="URL de la imagen"
-        value={nuevaUrl}
-        onChange={(e) => setNuevaUrl(e.target.value)}
-      />
-      <button onClick={handleAgregarUrl}> Agregar</button>
-
-      <h3>Imágenes guardadas</h3>
-      <ul>
-        {imagenes.map((img) => (
-          <li key={img.id}>
-            <img src={img.url} alt="Imagen subida" width="150" />
-            <br />
-            <button onClick={() => handleEliminarImagen(img.id)}> Eliminar</button>
-          </li>
-        ))}
-      </ul>
+        <button onClick={handleUpdate}> Guardar cambios</button>
+      </div>
 
       <hr />
-      <h2>¿Te quieres ir? </h2>
-      <button onClick={handleLogout}> Cerrar sesión</button>
-      <br /><br /><br /><br /><br />
+
+      <div className="imagenes-section">
+        <h3>🛸 Agregar imagen</h3>
+        <input
+          type="text"
+          placeholder="URL de la imagen"
+          value={nuevaUrl}
+          onChange={(e) => setNuevaUrl(e.target.value)}
+        />
+        <button onClick={handleAgregarUrl}>➕ Agregar</button>
+
+        {nuevaUrl && (
+          <div className="preview">
+            <p>Previsualización:</p>
+            <img src={nuevaUrl} alt="Preview" />
+          </div>
+        )}
+
+        <h3>Imágenes guardadas</h3>
+        <ul className="imagenes-lista">
+          {imagenes.map((img) => (
+            <li key={img.id}>
+              <img src={img.url} alt="Imagen subida" />
+              <button onClick={() => handleEliminarImagen(img.id)}>🗑️ Eliminar</button>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <hr />
+      <h2>¿Te quieres ir?</h2>
+      <button className="logout" onClick={handleLogout}>Cerrar sesión</button>
     </div>
   );
 }

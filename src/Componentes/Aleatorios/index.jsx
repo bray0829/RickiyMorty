@@ -1,50 +1,59 @@
-import { useState, useContext, useEffect } from "react";
+import { useEffect, useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { AppContext } from '../../Contexto/Contexto';
 
 function Aleatorios() {
-  const { episodios, listaVistos, setListaVistos } = useContext(AppContext);
+  const { data, listaVistos, setListaVistos, setTipoSeleccionado } = useContext(AppContext);
   const [aleatorio, setAleatorio] = useState([]);
   const navigate = useNavigate();
 
+  useEffect(() => {
+    setTipoSeleccionado("All");
+  }, [setTipoSeleccionado]);
+
   const generar = () => {
+    if (!Array.isArray(data) || data.length === 0) return;
+
     let nuevosAleatorios = [];
+    const usados = new Set();
 
-    while (nuevosAleatorios.length < 4 && episodios.length > 0) {
-      const index = Math.floor(Math.random() * episodios.length);
-      const episodio = episodios[index];
+    while (nuevosAleatorios.length < 4 && usados.size < data.length) {
+      const index = Math.floor(Math.random() * data.length);
+      const personaje = data[index];
 
-      if (!nuevosAleatorios.find(e => e.id === episodio.id)) {
-        nuevosAleatorios.push(episodio);
+      if (!usados.has(personaje.id)) {
+        usados.add(personaje.id);
+        nuevosAleatorios.push(personaje);
       }
     }
 
     setAleatorio(nuevosAleatorios);
 
-    // Guardar como vistos si no lo estaban
     const nuevosIds = nuevosAleatorios
-      .map(e => e.id.toString())
+      .map(p => p.id.toString())
       .filter(id => !listaVistos.includes(id));
 
-    setListaVistos(prev => [...prev, ...nuevosIds]);
+    if (nuevosIds.length > 0) {
+      setListaVistos(prev => [...prev, ...nuevosIds]);
+    }
   };
 
   return (
     <section className="c-aleatorio c-lista">
-      {aleatorio.map((episodio, index) => (
+      {aleatorio.map((personaje) => (
         <div
           className="c-lista-episodio c-un_aleatorio"
-          key={index}
-          onClick={() => navigate(`/Episodios/${episodio.id}`)}
+          key={personaje.id}
+          onClick={() => navigate(`/Personaje/${personaje.id}`)}
         >
-          <p>ID: {episodio.id}</p>
+          <p>ID: {personaje.id}</p>
           <img
-            src="/img/episodio_default.jpg" // Usa una imagen genérica o crea miniaturas propias
-            alt={`Episodio ${episodio.name}`}
+            src={personaje.image}
+            alt={`Personaje ${personaje.name}`}
             width="100"
             height="100"
           />
-          <p>{episodio.name}</p>
+          <p>{personaje.name}</p>
         </div>
       ))}
       <button onClick={generar}>Generar</button>

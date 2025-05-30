@@ -13,6 +13,7 @@ import Usuarios from './Componentes/Usuarios';
 import Login from './Componentes/login';
 import Registro from './Componentes/Registro';
 import Administrador from './Componentes/Administrador';
+import Filtro from './Componentes/Filtro'; // 👈 Aquí
 
 import './App.css';
 
@@ -42,15 +43,14 @@ function App() {
         {usuario && <Menu />}
 
         <Routes>
-          {/* Rutas privadas */}
           <Route path="/" element={usuario ? <Listas /> : <Navigate to="/login" />} />
           <Route path="/aleatorios" element={usuario ? <Aleatorios /> : <Navigate to="/login" />} />
           <Route path="/episodios" element={usuario ? <Episodios /> : <Navigate to="/login" />} />
           <Route path="/favoritos" element={usuario ? <Favoritos /> : <Navigate to="/login" />} />
-          <Route path="/detalle/:id" element={usuario ? <Personajes /> : <Navigate to="/login" />} />
+          <Route path="/Personajes/:id" element={usuario ? <Personajes /> : <Navigate to="/login" />} />
           <Route path="/usuarios" element={usuario ? <Usuarios /> : <Navigate to="/login" />} />
+          <Route path="/filtro" element={usuario ? <Filtro /> : <Navigate to="/login" />} /> {/* 👈 Aquí */}
 
-          {/* Rutas públicas */}
           <Route path="/login" element={<Login />} />
           <Route path="/registro" element={<Registro />} />
           <Route path="/administrador" element={<Administrador />} />

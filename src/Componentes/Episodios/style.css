@@ -1,0 +1,12 @@
+
+.episodios-list {
+  padding: 1rem;
+  background-color: #1c1c1e;
+  color: #00ff9f;
+  list-style: none;
+}
+
+.episodio-item {
+  border-bottom: 1px dashed #00bfff;
+  padding: 0.5rem 0;
+}
